@@ -1,0 +1,19 @@
+{
+  "forms": {
+    "weddingRsvp": {
+      "name": "Vikram & Kavita Wedding RSVP",
+      "fields": {
+        "name": { "type": "text", "required": true },
+        "phone": { "type": "text" },
+        "guests": { "type": "text" },
+        "attending": { "type": "text" },
+        "events": { "type": "text" },
+        "message": { "type": "text" },
+        "email": { "type": "email" }
+      },
+      "actions": [
+        { "type": "email" }
+      ]
+    }
+  }
+}

@@ -148,5 +148,7 @@ export const wedding = {
       imagePosition: 'center 14%',
     },
   ],
-  formspreeEndpoint: 'https://formspree.io/f/YOUR_FORM_ID',
+  /** Prefer Vercel env VITE_FORMSPREE_ENDPOINT; fallback to hardcoded Formspree URL */
+  formspreeEndpoint:
+    import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/YOUR_FORM_ID',
 }
