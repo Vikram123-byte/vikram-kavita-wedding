@@ -4,6 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // Required for GitHub Pages project site
-  base: '/vikram-kavita-wedding/',
+  // Relative base works on GitHub Pages, Vercel, and Netlify
+  base: './',
 })
