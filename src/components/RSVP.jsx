@@ -46,6 +46,7 @@ export default function RSVP() {
     }
 
     try {
+      // Formspree AJAX (JSON) — same pattern as their Vanilla JS / React guides
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -54,12 +55,20 @@ export default function RSVP() {
           _subject: `Wedding RSVP — ${form.name}`,
         }),
       })
-      if (!res.ok) throw new Error('Submission failed')
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const fieldError = data?.errors?.[0]?.message
+        throw new Error(fieldError || 'Submission failed')
+      }
       setStatus('success')
       setForm(initial)
-    } catch {
+    } catch (err) {
       setStatus('error')
-      setErrorMsg('Something went wrong. Please try again or message the family directly.')
+      setErrorMsg(
+        err?.message && err.message !== 'Submission failed'
+          ? err.message
+          : 'Something went wrong. Please try again or message the family directly.',
+      )
     }
   }
 

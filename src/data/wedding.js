@@ -148,7 +148,7 @@ export const wedding = {
       imagePosition: 'center 14%',
     },
   ],
-  /** Prefer Vercel env VITE_FORMSPREE_ENDPOINT; fallback to hardcoded Formspree URL */
+  /** Override with VITE_FORMSPREE_ENDPOINT if needed; default is the live Formspree form */
   formspreeEndpoint:
-    import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/YOUR_FORM_ID',
+    import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/xkjwoyje',
 }
