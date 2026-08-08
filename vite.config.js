@@ -4,6 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // Uncomment for GitHub Pages (replace with your repo name):
-  // base: '/vikram-kavita-wedding/',
+  // Required for GitHub Pages project site
+  base: '/vikram-kavita-wedding/',
 })
