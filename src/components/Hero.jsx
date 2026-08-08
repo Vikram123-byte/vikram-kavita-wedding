@@ -45,7 +45,7 @@ export default function Hero() {
         >
           <div className="mx-auto h-24 w-24 overflow-hidden rounded-full border-2 border-[#D4AF37] shadow-[0_0_28px_rgba(212,175,55,0.45)] sm:h-28 sm:w-28">
             <img
-              src="/ganesha-blessing.jpg"
+              src="/ganesha-blessing.webp"
               alt="Lord Ganesha"
               className="h-full w-full object-cover object-center"
             />

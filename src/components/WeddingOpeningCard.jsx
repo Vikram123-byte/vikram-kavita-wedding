@@ -20,7 +20,7 @@ function PalaceDoor({ side, opening, onOpen }) {
       <div
         className="absolute inset-0 bg-cover bg-no-repeat"
         style={{
-          backgroundImage: 'url(/opening/corridor-arches.png)',
+          backgroundImage: 'url(/opening/corridor-arches.webp)',
           backgroundSize: '200% 100%',
           backgroundPosition: isLeft ? 'left center' : 'right center',
         }}

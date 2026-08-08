@@ -8,7 +8,7 @@ const initial = {
   name: '',
   guests: '1',
   attending: 'yes',
-  events: '',
+  selectedEvents: [],
   message: '',
   phone: '',
 }
@@ -23,6 +23,18 @@ export default function RSVP() {
     setForm((f) => ({ ...f, [name]: value }))
   }
 
+  const toggleEvent = (title) => {
+    setForm((f) => {
+      const has = f.selectedEvents.includes(title)
+      return {
+        ...f,
+        selectedEvents: has
+          ? f.selectedEvents.filter((t) => t !== title)
+          : [...f.selectedEvents, title],
+      }
+    })
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault()
     setStatus('loading')
@@ -30,30 +42,35 @@ export default function RSVP() {
 
     const endpoint = wedding.formspreeEndpoint
     const isConfigured = endpoint && !endpoint.includes('YOUR_FORM_ID')
+    const payload = {
+      name: form.name,
+      phone: form.phone,
+      guests: form.guests,
+      attending: form.attending,
+      events: form.selectedEvents.join(', ') || 'None selected',
+      message: form.message,
+      _subject: `Wedding RSVP — ${form.name}`,
+    }
 
     if (!isConfigured) {
       try {
         const existing = JSON.parse(localStorage.getItem('wedding-rsvps') || '[]')
-        existing.push({ ...form, submittedAt: new Date().toISOString() })
+        existing.push({ ...payload, submittedAt: new Date().toISOString() })
         localStorage.setItem('wedding-rsvps', JSON.stringify(existing))
         setStatus('local')
         setForm(initial)
       } catch {
         setStatus('error')
-        setErrorMsg('Could not save your RSVP locally. Please try again.')
+        setErrorMsg('Could not save your RSVP. Please try again.')
       }
       return
     }
 
     try {
-      // Formspree AJAX (JSON) — same pattern as their Vanilla JS / React guides
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          _subject: `Wedding RSVP — ${form.name}`,
-        }),
+        body: JSON.stringify(payload),
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
@@ -87,9 +104,7 @@ export default function RSVP() {
               <CheckCircle2 className="mx-auto text-sindoor" size={36} strokeWidth={1.25} />
               <h3 className="mt-4 font-display text-2xl text-sindoor">Thank you</h3>
               <p className="mt-3 text-sm leading-relaxed text-ink/70">
-                {status === 'local'
-                  ? 'Your RSVP has been saved on this device. Connect Formspree to receive email submissions.'
-                  : 'Your response has been received. We look forward to celebrating with you.'}
+                Your response has been received. We look forward to celebrating with you.
               </p>
               <button
                 type="button"
@@ -123,9 +138,39 @@ export default function RSVP() {
                   </select>
                 </Field>
               </div>
-              <Field label="Events you plan to attend">
-                <input name="events" value={form.events} onChange={onChange} className="field" placeholder="e.g. Sangeet, Wedding, Reception" />
-              </Field>
+              <fieldset>
+                <legend className="mb-3 block text-[10px] uppercase tracking-[0.22em] text-sindoor/70">
+                  Events you plan to attend
+                </legend>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {wedding.events.map((event) => {
+                    const checked = form.selectedEvents.includes(event.title)
+                    return (
+                      <label
+                        key={event.id}
+                        className={`flex cursor-pointer items-start gap-2.5 border px-3 py-2.5 text-sm transition ${
+                          checked
+                            ? 'border-sindoor/50 bg-sindoor/5 text-sindoor'
+                            : 'border-gold/35 bg-[#fff8ee] text-ink/80'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          className="mt-1 accent-[#9b1b2f]"
+                          checked={checked}
+                          onChange={() => toggleEvent(event.title)}
+                        />
+                        <span>
+                          <span className="block font-medium leading-snug">{event.title}</span>
+                          <span className="mt-0.5 block text-[11px] text-ink/50">
+                            {event.date.replace('2026', '').trim()} · {event.time}
+                          </span>
+                        </span>
+                      </label>
+                    )
+                  })}
+                </div>
+              </fieldset>
               <Field label="Message / blessings">
                 <textarea name="message" value={form.message} onChange={onChange} rows={3} className="field resize-none" placeholder="A note for the couple…" />
               </Field>
