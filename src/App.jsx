@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CalendarDays, Heart, MapPin, Send } from 'lucide-react'
 import WeddingOpeningCard from './components/WeddingOpeningCard'
+import PartyPoppers from './components/PartyPoppers'
 import Hero from './components/Hero'
 import ScratchCard from './components/ScratchCard'
 import OurStory from './components/OurStory'
@@ -170,6 +171,7 @@ function InviteApp() {
   return (
     <div id="top" className="min-h-screen">
       <WeddingOpeningCard isOpen={opened} onEnter={handleEnter} />
+      <PartyPoppers fire={opened} />
       <Nav visible={opened} />
       <MobileBottomNav visible={opened} />
 
